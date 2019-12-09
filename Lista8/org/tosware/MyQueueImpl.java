@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class MyQueueImpl<E> implements MyQueue<E> {
 	private ArrayList<E> a;
-	int f = 0, r = 0;
+	private int f = 0, r = 0;
 	public MyQueueImpl(int size) {
 		 a = new ArrayList<>(size+1);
 		 for (int i = 0; i <= size; i++) {
