@@ -1,5 +1,7 @@
 package org.tosware;
 
+import java.util.concurrent.Semaphore;
+
 class IntCell {
 	private int n = 0;
 
@@ -14,6 +16,7 @@ class IntCell {
 
 class Count extends Thread {
 	private static IntCell n = new IntCell();
+
 	@Override
 	public void run() {
 		int temp;
@@ -28,10 +31,71 @@ class Count extends Thread {
 	}
 }
 
+class MonitorCount extends Thread {
+	private static IntCell n = new IntCell();
+
+	@Override
+	public void run() {
+		int temp;
+		for (int i = 0; i < 200000; i++) {
+			synchronized (n) {
+				temp = n.getN();
+				// if(temp != n.getN()) System.out.println("Oops! " + temp + " " + n.getN());
+				n.setN(temp + 1);
+				System.out.println("The value of n is " + n.getN());
+			}
+		}
+	}
+}
+
+class SemaforCount extends Thread {
+	private static IntCell n = new IntCell();
+	private static Semaphore sem = new Semaphore(1);
+
+	@Override
+	public void run() {
+		int temp;
+		for (int i = 0; i < 200000; i++) {
+			try {
+				sem.acquire();
+			} catch (InterruptedException e) {
+				//TODO: ignored
+			}
+			temp = n.getN();
+			// if(temp != n.getN()) System.out.println("Oops! " + temp + " " + n.getN());
+			n.setN(temp + 1);
+			System.out.println("The value of n is " + n.getN());
+			sem.release();
+		}
+	}
+}
+
 public class Main {
 	public static void main(String[] args) {
+		zad2b();
+	}
+
+	public static void zad1() {
 		Count p = new Count();
 		Count q = new Count();
+		p.start();
+		q.start();
+		try {p.join(); q.join();}
+		catch (InterruptedException e) {}
+	}
+
+	public static void zad2a() {
+		MonitorCount p = new MonitorCount();
+		MonitorCount q = new MonitorCount();
+		p.start();
+		q.start();
+		try {p.join(); q.join();}
+		catch (InterruptedException e) {}
+	}
+
+	public static void zad2b() {
+		SemaforCount p = new SemaforCount();
+		SemaforCount q = new SemaforCount();
 		p.start();
 		q.start();
 		try {p.join(); q.join();}
