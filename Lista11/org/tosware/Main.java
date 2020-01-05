@@ -102,3 +102,12 @@ public class Main {
 		catch (InterruptedException e) {}
 	}
 }
+
+/**
+ * zad3
+ * 
+ * It is NOT safe to change notifyAll() with notify(), because there are threads that serve different purposes,
+ * so we may wake up producer after producing something, that producer checks the loop and waits (everything is filled), and all threads are waiting there.
+ * 
+ * See more: https://stackoverflow.com/a/3186336/7136056
+ */
