@@ -1,18 +1,24 @@
 package org.tosware;
 
 public class Printer {
+    public static int alla = 0;
+    public static int allb = 0;
+    public static boolean canAPrint() {
+        return alla < allb;
+    }
     public synchronized void printA() {
-        while (!Main.canAPrint()) {
+        while (!canAPrint()) {
             try {
                 wait();
-            } catch (InterruptedException e) {
-            }
-            System.out.println("A");
+            } catch (InterruptedException e) { }
         }
+        System.out.print("A");
+        alla++;
     }
 
     public synchronized void printB() {
-        System.out.println("B");
+        System.out.print("B");
+        allb++;
         notifyAll();
     }
 

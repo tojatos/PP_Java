@@ -1,7 +1,6 @@
 package org.tosware;
 
 import java.util.Random;
-import java.util.concurrent.Semaphore;
 
 public class TransferProgram extends Thread {
 
